@@ -1,5 +1,6 @@
 const User = require("./../models/userModel");
 const jwt = require("jsonwebtoken");
+const { promisify } = require("util");
 
 //function that signs a new token
 const signToken = (id) => {
@@ -11,12 +12,7 @@ const signToken = (id) => {
 exports.signup = async (req, res, next) => {
   try {
     // const newUser = await User.create(req.body);
-    const newUser = await User.create({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-      passwordConfirm: req.body.passwordConfirm,
-    });
+    const newUser = await User.create(req.body);
 
     //create a new token by calling the function
     const token = signToken(newUser._id);
@@ -39,6 +35,7 @@ exports.login = async (req, res, next) => {
 
   //check if email and password exists
   if (!email || !password) {
+    res.send({ status: "failed" });
     return next("please provide email or password ");
   }
 
@@ -71,4 +68,37 @@ exports.checkUserLogin = (req, res, next) => {
       loggedIn: false,
     });
   }
+};
+
+exports.protect = async (req, res, next) => {
+  // get the token and check if it exists
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  console.log(token);
+  if (!token) {
+    next("token does not exixts");
+  }
+  // validate the token
+  try {
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    // check if user still exists
+    const freshUser = await User.findById(decoded.id);
+    if (!freshUser) {
+      next("user does not exist anymore");
+    }
+    //check if user changed password after jwt was issued
+    if (freshUser.changedPasswordAfter(decoded.iat)) {
+      return next("password has been changed recently, please log in again");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  //grant access to the protected route
+  req.user = freshUser;
+  next();
 };
