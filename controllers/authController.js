@@ -1,6 +1,6 @@
-const User = require('./../models/userModel');
-const jwt = require('jsonwebtoken');
-const { promisify } = require('util');
+const User = require("./../models/userModel");
+const jwt = require("jsonwebtoken");
+const { promisify } = require("util");
 
 //function that signs a new token
 const signToken = (id) => {
@@ -18,7 +18,7 @@ exports.signup = async (req, res, next) => {
 		const token = signToken(newUser._id);
 
 		res.status(201).json({
-			status: 'succces',
+			status: "succces",
 			token,
 			data: {
 				user: newUser,
@@ -35,16 +35,16 @@ exports.login = async (req, res, next) => {
 
 	//check if email and password exists
 	if (!email || !password) {
-		res.send({ status: 'failed' });
-		return next('please provide email or password ');
+		res.send({ status: "failed" });
+		return next("please provide email or password ");
 	}
 
 	//check if user exists and password is correct
-	const user = await User.findOne({ email: email }).select('+password');
+	const user = await User.findOne({ email: email }).select("+password");
 
 	if (!user || !(await user.correctPassword(password, user.password))) {
-		res.send({ status: 'failed' });
-		return next('Incorrect email or password');
+		res.send({ status: "failed" });
+		return next("Incorrect email or password");
 	}
 
 	//if everything is okay send token to client
@@ -52,7 +52,7 @@ exports.login = async (req, res, next) => {
 	req.session.user = user;
 	console.log(req.session.user);
 	res.status(200).json({
-		status: 'success',
+		status: "success",
 		token,
 	});
 };
@@ -75,13 +75,13 @@ exports.protect = async (req, res, next) => {
 	let token;
 	if (
 		req.headers.authorization &&
-		req.headers.authorization.startsWith('Bearer')
+		req.headers.authorization.startsWith("Bearer")
 	) {
-		token = req.headers.authorization.split(' ')[1];
+		token = req.headers.authorization.split(" ")[1];
 	}
 	console.log(token);
 	if (!token) {
-		next('token does not exixts');
+		return next("token does not exixts");
 	}
 	// validate the token
 	try {
@@ -89,11 +89,11 @@ exports.protect = async (req, res, next) => {
 		// check if user still exists
 		const freshUser = await User.findById(decoded.id);
 		if (!freshUser) {
-			next('user does not exist anymore');
+			next("user does not exist anymore");
 		}
 		//check if user changed password after jwt was issued
 		if (freshUser.changedPasswordAfter(decoded.iat)) {
-			return next('password has been changed recently, please log in again');
+			return next("password has been changed recently, please log in again");
 		}
 
 		//grant access to the protected route

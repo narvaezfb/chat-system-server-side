@@ -1,13 +1,16 @@
 const mongoose = require("mongoose");
-const validator = require("validator");
 
-const friendshipSchema = new mongoose.Schema(
+const chatRoomSchema = new mongoose.Schema(
 	{
-		firstUser: {
+		createdAt: {
+			type: Date,
+			default: Date.now(),
+		},
+		userID1: {
 			type: mongoose.Schema.ObjectId,
 			ref: "User",
 		},
-		secondUser: {
+		userID2: {
 			type: mongoose.Schema.ObjectId,
 			ref: "User",
 		},
@@ -18,5 +21,5 @@ const friendshipSchema = new mongoose.Schema(
 	}
 );
 
-const Friendship = mongoose.model("Friendship", friendshipSchema);
-module.exports = Friendship;
+const ChatRoom = mongoose.model("ChatRoom", chatRoomSchema);
+module.exports = ChatRoom;
