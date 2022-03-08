@@ -8,17 +8,21 @@ exports.createChatRoom = async (req, res, next) => {
 		],
 	});
 
-	if (validateExistingChatRoom) {
-		res.send({ status: "failed" });
-		return next("this chat already exists ");
+	if (validateExistingChatRoom.length === 0) {
+		const chatRoom = await ChatRoom.create(req.body);
+		res.status(201).json({
+			status: "success",
+			data: {
+				chatRoom,
+			},
+		});
+	} else {
+		return next("chatRoom already exists");
 	}
-	const chatRoom = await ChatRoom.create(req.body);
-	res.status(201).json({
-		status: "success",
-		data: {
-			chatRoom,
-		},
-	});
+
+	// res.send({ status: "failed", data: { validateExistingChatRoom } });
+
+	// return next("this chat already exists ");
 };
 
 exports.getAllChatRooms = async (req, res, next) => {
