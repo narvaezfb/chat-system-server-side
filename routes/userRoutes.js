@@ -13,4 +13,6 @@ router.get("/users/:id", userController.getOneUser);
 
 router.get("/login", authController.checkUserLogin);
 
+router.patch("/user/:id", userController.updateUser);
+
 module.exports = router;
