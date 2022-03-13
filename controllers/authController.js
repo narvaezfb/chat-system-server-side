@@ -49,10 +49,15 @@ exports.login = async (req, res, next) => {
 
 	//if everything is okay send token to client
 	const token = signToken(user._id);
+
+	//create a new session
 	req.session.user = user;
 	console.log(req.session.user);
+
+	//send data back to the client
 	res.status(200).json({
 		status: "success",
+		auth: true,
 		token,
 	});
 };
@@ -79,7 +84,7 @@ exports.protect = async (req, res, next) => {
 	) {
 		token = req.headers.authorization.split(" ")[1];
 	}
-	console.log(token);
+
 	if (!token) {
 		return next("token does not exixts");
 	}
@@ -98,6 +103,7 @@ exports.protect = async (req, res, next) => {
 
 		//grant access to the protected route
 		req.user = freshUser;
+		req.userId = decoded.id;
 		next();
 	} catch (error) {
 		console.log(error);

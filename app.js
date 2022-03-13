@@ -17,6 +17,7 @@ app.use(
 			"http://localhost:3000",
 			"http://localhost:3000/login",
 			"http://localhost:3000/chat",
+			"http://localhost:3000/user/userProfile",
 		],
 		methods: ["GET", "POST", "PATCH", "DELETE"],
 		credentials: true,
@@ -33,7 +34,7 @@ app.use(
 		resave: false,
 		saveUninitialized: true,
 		cookie: {
-			expires: 600 * 600 * 24,
+			expires: 60 * 600 * 24,
 		},
 	})
 );

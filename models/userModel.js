@@ -1,34 +1,34 @@
-const mongoose = require('mongoose');
-const validator = require('validator');
-const bcrypt = require('bcryptjs');
+const mongoose = require("mongoose");
+const validator = require("validator");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
 	name: {
 		type: String,
-		required: [true, 'Please tell us your name'],
+		required: [true, "Please tell us your name"],
 	},
 	email: {
 		type: String,
-		require: [true, 'please enter email'],
+		require: [true, "please enter email"],
 		unique: true,
 		lowercase: true,
-		validate: [validator.isEmail, 'Please provide a valid email '],
+		validate: [validator.isEmail, "Please provide a valid email "],
 	},
 	password: {
 		type: String,
-		required: [true, 'Please provide password'],
+		required: [true, "Please provide password"],
 		minlength: 8,
 		select: false,
 	},
 	passwordConfirm: {
 		type: String,
-		required: [true, 'please confirm your password'],
+		required: [true, "please confirm your password"],
 		validate: {
 			//this only works on create and save
 			validator: function (el) {
 				return el === this.password;
 			},
-			message: 'Passwords are not the same',
+			message: "Passwords are not the same",
 		},
 	},
 	passwordChangedAt: {
@@ -36,9 +36,9 @@ const userSchema = new mongoose.Schema({
 	},
 });
 
-userSchema.pre('save', async function (next) {
+userSchema.pre("save", async function (next) {
 	//only runs if password was modified
-	if (!this.isModified('password')) return next();
+	if (!this.isModified("password")) return next();
 	//hash the password with cost of 12
 	this.password = await bcrypt.hash(this.password, 12);
 	this.passwordConfirm = undefined;
@@ -65,6 +65,6 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
 	return false;
 };
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;

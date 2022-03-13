@@ -1,12 +1,13 @@
 const express = require("express");
 const chatRoomController = require("./../controllers/chatRoomController");
+const authController = require("./../controllers/authController");
 
 const router = express.Router();
 
 router
 	.route("/chatRooms")
 	.get(chatRoomController.getAllChatRooms)
-	.post(chatRoomController.createChatRoom);
+	.post(authController.protect, chatRoomController.createChatRoom);
 
 router
 	.route("/chatRooms/:id")
@@ -18,6 +19,8 @@ router
 	.route("/chatRooms/:userID1/:userID2")
 	.get(chatRoomController.getChatRoomBasedOnUsers);
 
-router.route("/userchats/:userID1").get(chatRoomController.getUserChats);
+router
+	.route("/userchats/:userID1")
+	.get(authController.protect, chatRoomController.getUserChats);
 
 module.exports = router;

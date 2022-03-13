@@ -1,5 +1,6 @@
 const express = require("express");
 const messageController = require("./../controllers/messageController");
+const authController = require("./../controllers/authController");
 
 const router = express.Router();
 
@@ -16,6 +17,6 @@ router
 
 router
 	.route("/chatRoom/:id/messages")
-	.get(messageController.getMessagesByChatRoom);
+	.get(authController.protect, messageController.getMessagesByChatRoom);
 
 module.exports = router;
