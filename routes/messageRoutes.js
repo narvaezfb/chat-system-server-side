@@ -12,8 +12,8 @@ router
 router
 	.route("/messages/:id")
 	.get(messageController.getOneMessage)
-	.patch(messageController.updateMessage)
-	.delete(messageController.deleteMessage);
+	.patch(authController.protect, messageController.updateMessage)
+	.delete(authController.protect, messageController.deleteMessage);
 
 router
 	.route("/chatRoom/:id/messages")

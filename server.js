@@ -2,6 +2,7 @@ const app = require("./app");
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
+const moment = require("moment");
 
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
@@ -50,10 +51,13 @@ io.on("connection", function (socket) {
 
 	//event when user send data
 	socket.on("send-message", async (data) => {
+		const date = new Date();
+		const dateFormated = moment(date).format("MMMM Do YYYY, h:mm:ss a");
 		const newMessageData = {
 			chatRoom: data.chatRoom,
 			fromUser: data.From,
 			message: data.message,
+			// createdAt: dateFormated,
 		};
 
 		const message = await Message.create(newMessageData);
@@ -67,6 +71,10 @@ io.on("connection", function (socket) {
 			.emit("recieve-message", retrieveCurrentChatHistory);
 	});
 
+	// socket.on("force", function () {
+	// 	console.log("disconnect user");
+	// 	socket.close();
+	// });
 	//Whenever someone disconnects this piece of code executed
 	socket.on("disconnect", function () {
 		console.log("A user disconnected");

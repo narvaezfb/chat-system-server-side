@@ -15,6 +15,7 @@ app.use(
 	cors({
 		origin: [
 			"http://localhost:3000",
+			"http://localhost:3000/",
 			"http://localhost:3000/login",
 			"http://localhost:3000/chat",
 			"http://localhost:3000/user/userProfile",
