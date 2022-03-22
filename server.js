@@ -42,6 +42,7 @@ mongoose
 
 //start the server
 const port = process.env.PORT;
+
 io.on("connection", function (socket) {
 	//event when user enter the room number
 	socket.on("joined", (data) => {
