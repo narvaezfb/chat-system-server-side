@@ -1,6 +1,62 @@
+const multer = require("multer");
 const Message = require("./../models/messageModel");
 
+const multerImageStorage = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, "public/img/messages");
+	},
+	filename: (req, file, cb) => {
+		const ext = file.mimetype.split("/")[1];
+		cb(null, `image-message-${Date.now()}.${ext}`);
+	},
+});
+
+const multerAudioStorage = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, "public/audios");
+	},
+	filename: (req, file, cb) => {
+		const ext = file.mimetype.split("/")[1];
+		cb(null, `audio-message-${Date.now()}.mp3`);
+	},
+});
+
+const multerImageFilter = (req, file, cb) => {
+	if (file.mimetype.startsWith("image")) {
+		cb(null, true);
+	} else {
+		cb(() => {
+			console.log("please upload only images");
+		}, false);
+	}
+};
+
+const multerAudioFilter = (req, file, cb) => {
+	if (file.mimetype.startsWith("audio")) {
+		cb(null, true);
+	} else {
+		cb(() => {
+			console.log("please upload only audio");
+		}, false);
+	}
+};
+
+const uploadImage = multer({
+	storage: multerImageStorage,
+	fileFilter: multerImageFilter,
+});
+const uploadAudio = multer({
+	storage: multerAudioStorage,
+	fileFilter: multerAudioFilter,
+});
+
+exports.uploadImageHandler = uploadImage.single("image");
+
+exports.uploadAudioHandler = uploadAudio.single("audio");
+
 exports.createMessage = async (req, res, next) => {
+	console.log(req.file);
+	if (req.file) req.body.audio = req.file.filename;
 	const message = await Message.create(req.body);
 	res.status(201).json({
 		status: "success",

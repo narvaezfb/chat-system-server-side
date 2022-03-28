@@ -52,7 +52,9 @@ exports.login = async (req, res, next) => {
 
 	//create a new session
 	req.session.user = user;
+	req.user = user;
 	console.log(req.session.user);
+	console.log(req.user);
 
 	//send data back to the client
 	res.status(200).json({

@@ -18,6 +18,12 @@ const messageSchema = new mongoose.Schema(
 			type: mongoose.Schema.ObjectId,
 			ref: "User",
 		},
+		audio: {
+			type: String,
+		},
+		image: {
+			type: String,
+		},
 	},
 	{
 		toJSON: { virtuals: true },

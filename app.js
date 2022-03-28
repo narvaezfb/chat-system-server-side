@@ -19,6 +19,8 @@ app.use(
 			"http://localhost:3000/login",
 			"http://localhost:3000/chat",
 			"http://localhost:3000/user/userProfile",
+			"http://localhost:3000/audio",
+			"http://localhost:3000/audio/",
 		],
 		methods: ["GET", "POST", "PATCH", "DELETE"],
 		credentials: true,
