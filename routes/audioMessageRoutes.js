@@ -24,7 +24,7 @@ router
 	.get(audioMessageController.reproduceOneAudioMessage);
 
 router
-	.route("/reproduceAudioMessages")
-	.get(audioMessageController.reproduceAllAudioMessage);
+	.route("/audioMessages/chatRoom/:chatRoom")
+	.get(audioMessageController.audioMessages);
 
 module.exports = router;

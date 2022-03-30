@@ -62,6 +62,7 @@ io.on("connection", function (socket) {
 			chatRoom: data.chatRoom,
 			fromUser: data.From,
 			message: data.message,
+			messageFormat: data.messageFormat,
 			// createdAt: dateFormated,
 		};
 

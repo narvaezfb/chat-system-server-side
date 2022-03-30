@@ -18,11 +18,12 @@ const messageSchema = new mongoose.Schema(
 			type: mongoose.Schema.ObjectId,
 			ref: "User",
 		},
-		audio: {
+		messageFormat: {
 			type: String,
 		},
-		image: {
-			type: String,
+		audio: {
+			type: mongoose.Schema.ObjectId,
+			ref: "AudioMessage",
 		},
 	},
 	{

@@ -51,8 +51,12 @@ var storage = new GridFsStorage({
 const upload = multer({ storage });
 exports.uploadAudioHandler = upload.single("audio");
 
-exports.createAudioMessage = (req, res, next) => {
-	res.json({ audio: req.file });
+exports.createAudioMessage = async (req, res, next) => {
+	req.file.fromUser = req.body.fromUser;
+	req.file.chatRoom = req.body.chatRoom;
+	const audioMessage = await AudioMessage.create(req.file);
+	console.log(req.file);
+	res.json({ audio: req.file, audioMessage: audioMessage });
 };
 
 exports.getAllAudioMessages = (req, res, next) => {
@@ -98,18 +102,6 @@ exports.reproduceOneAudioMessage = (req, res, next) => {
 	});
 };
 
-exports.reproduceAllAudioMessage = (req, res, next) => {
-	gfs.files.find().toArray((err, files) => {
-		if (err) return res.send(err);
-
-		if (!files || files.length === 0) {
-			return res.status(404).json({
-				err: "no found files ",
-			});
-		}
-	});
-};
-
 exports.getAllAudioMessagesToClient = (req, res, next) => {
 	gfs.files.find().toArray((err, files) => {
 		// Check if files
@@ -128,5 +120,20 @@ exports.getAllAudioMessagesToClient = (req, res, next) => {
 			});
 			return res.json({ status: "success", files: files });
 		}
+	});
+};
+
+exports.audioMessages = async (req, res, next) => {
+	const audioMessages = await AudioMessage.find({
+		chatRoom: req.params.chatRoom,
+	});
+
+	if (!audioMessages || audioMessages.length === 0) {
+		return res.json({ status: "failed" });
+	}
+
+	res.json({
+		status: "success",
+		audioMessages: audioMessages,
 	});
 };

@@ -7,7 +7,7 @@ const router = express.Router();
 router
 	.route("/messages")
 	.get(messageController.getAllMessages)
-	.post(messageController.uploadAudioHandler, messageController.createMessage);
+	.post(messageController.createMessage);
 
 router
 	.route("/messages/:id")

@@ -1,59 +1,6 @@
 const multer = require("multer");
 const Message = require("./../models/messageModel");
 
-const multerImageStorage = multer.diskStorage({
-	destination: (req, file, cb) => {
-		cb(null, "public/img/messages");
-	},
-	filename: (req, file, cb) => {
-		const ext = file.mimetype.split("/")[1];
-		cb(null, `image-message-${Date.now()}.${ext}`);
-	},
-});
-
-const multerAudioStorage = multer.diskStorage({
-	destination: (req, file, cb) => {
-		cb(null, "public/audios");
-	},
-	filename: (req, file, cb) => {
-		const ext = file.mimetype.split("/")[1];
-		cb(null, `audio-message-${Date.now()}.mp3`);
-	},
-});
-
-const multerImageFilter = (req, file, cb) => {
-	if (file.mimetype.startsWith("image")) {
-		cb(null, true);
-	} else {
-		cb(() => {
-			console.log("please upload only images");
-		}, false);
-	}
-};
-
-const multerAudioFilter = (req, file, cb) => {
-	if (file.mimetype.startsWith("audio")) {
-		cb(null, true);
-	} else {
-		cb(() => {
-			console.log("please upload only audio");
-		}, false);
-	}
-};
-
-const uploadImage = multer({
-	storage: multerImageStorage,
-	fileFilter: multerImageFilter,
-});
-const uploadAudio = multer({
-	storage: multerAudioStorage,
-	fileFilter: multerAudioFilter,
-});
-
-exports.uploadImageHandler = uploadImage.single("image");
-
-exports.uploadAudioHandler = uploadAudio.single("audio");
-
 exports.createMessage = async (req, res, next) => {
 	console.log(req.file);
 	if (req.file) req.body.audio = req.file.filename;
@@ -65,8 +12,13 @@ exports.createMessage = async (req, res, next) => {
 		},
 	});
 };
+
 exports.getAllMessages = async (req, res, next) => {
-	const messages = await Message.find().populate(["User", "chatRoom"]);
+	const messages = await Message.find().populate([
+		"User",
+		"chatRoom",
+		"AudioMessage",
+	]);
 	res.status(200).json({
 		status: "success",
 		data: {
@@ -114,7 +66,11 @@ exports.deleteMessage = async (req, res, next) => {
 };
 
 exports.getMessagesByChatRoom = async (req, res, next) => {
-	const messages = await Message.find({ chatRoom: req.params.id });
+	const messages = await Message.find({ chatRoom: req.params.id }).populate([
+		"User",
+		"chatRoom",
+		"audio",
+	]);
 
 	if (messages.length <= 0)
 		return res.send({
