@@ -56,31 +56,50 @@ io.on("connection", function (socket) {
 
 	//event when user send data
 	socket.on("send-message", async (data) => {
-		const date = new Date();
-		const dateFormated = moment(date).format("MMMM Do YYYY, h:mm:ss a");
-		const newMessageData = {
-			chatRoom: data.chatRoom,
-			fromUser: data.From,
-			message: data.message,
-			messageFormat: data.messageFormat,
-			// createdAt: dateFormated,
-		};
+		//if message is text
+		if (data.messageFormat == "text") {
+			const newMessageData = {
+				chatRoom: data.chatRoom,
+				fromUser: data.From,
+				message: data.message,
+				messageFormat: data.messageFormat,
+				// createdAt: dateFormated,
+			};
 
-		const message = await Message.create(newMessageData);
+			const message = await Message.create(newMessageData);
 
-		const retrieveCurrentChatHistory = await Message.find({
-			chatRoom: data.chatRoom,
-		});
-		console.log(retrieveCurrentChatHistory);
-		socket
-			.to(data.chatRoom)
-			.emit("recieve-message", retrieveCurrentChatHistory);
+			const retrieveCurrentChatHistory = await Message.find({
+				chatRoom: data.chatRoom,
+			});
+			console.log(retrieveCurrentChatHistory);
+			socket
+				.to(data.chatRoom)
+				.emit("recieve-message", retrieveCurrentChatHistory);
+		}
+
+		if (data.messageFormat == "audio") {
+			const newMessageData = {
+				chatRoom: data.chatRoom,
+				fromUser: data.fromUser,
+				message: data.message,
+				messageFormat: data.messageFormat,
+				audio: data.audio,
+				filename: data.filename,
+				// createdAt: dateFormated,
+			};
+
+			const message = await Message.create(newMessageData);
+
+			const retrieveCurrentChatHistory = await Message.find({
+				chatRoom: data.chatRoom,
+			});
+			console.log(retrieveCurrentChatHistory);
+			socket
+				.to(data.chatRoom)
+				.emit("recieve-message", retrieveCurrentChatHistory);
+		}
 	});
 
-	// socket.on("force", function () {
-	// 	console.log("disconnect user");
-	// 	socket.close();
-	// });
 	//Whenever someone disconnects this piece of code executed
 	socket.on("disconnect", function () {
 		console.log("A user disconnected");

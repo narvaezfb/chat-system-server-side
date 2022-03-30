@@ -25,6 +25,9 @@ const messageSchema = new mongoose.Schema(
 			type: mongoose.Schema.ObjectId,
 			ref: "AudioMessage",
 		},
+		filename: {
+			type: String,
+		},
 	},
 	{
 		toJSON: { virtuals: true },
