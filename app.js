@@ -5,6 +5,8 @@ const userRoutes = require("./routes/userRoutes");
 const friendshipRoutes = require("./routes/friendshipRoutes");
 const chatRoomRoutes = require("./routes/chatRoomRoutes");
 const messageRoutes = require("./routes/messageRoutes");
+const audioMessagesRoutes = require("./routes/audioMessageRoutes");
+const imageMessagesRoutes = require("./routes/imageMessageRoutes");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const session = require("express-session");
@@ -46,5 +48,7 @@ app.use("/", userRoutes);
 app.use("/", friendshipRoutes);
 app.use("/", chatRoomRoutes);
 app.use("/", messageRoutes);
+app.use("/", audioMessagesRoutes);
+app.use("/", imageMessagesRoutes);
 
 module.exports = app;
