@@ -1,18 +1,22 @@
 const express = require("express");
-const audioMessageController = require("./../controllers/imageMessageController");
+const imageMessageController = require("./../controllers/imageMessageController");
 
 const router = express.Router();
 
 router
 	.route("/imageMessages")
 	.post(
-		audioMessageController.uploadMessageHandler,
-		audioMessageController.createImageMessage
+		imageMessageController.uploadMessageHandler,
+		imageMessageController.createImageMessage
 	)
-	.get(audioMessageController.getAllImageMessages);
+	.get(imageMessageController.getAllImageMessages);
 
 router
 	.route("/imageMessages/:filename")
-	.get(audioMessageController.getOneImage);
+	.get(imageMessageController.getOneImage);
+
+router
+	.route("/imageMessages/chatRoom/:chatRoom")
+	.get(imageMessageController.imageMessages);
 
 module.exports = router;

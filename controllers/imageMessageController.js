@@ -1,7 +1,7 @@
 const multer = require("multer");
 const streamBuffers = require("stream-buffers");
 const Grid = require("gridfs-stream");
-const AudioMessage = require("../models/audioMessageModel");
+const ImageMessage = require("./../models/imageMessageModel");
 const mongoose = require("mongoose");
 const { GridFsStorage } = require("multer-gridfs-storage");
 const crypto = require("crypto");
@@ -32,10 +32,9 @@ var storage = new GridFsStorage({
 				if (err) {
 					return reject(err);
 				}
-				const filename =
-					buf.toString("hex") +
-					"-image-message" +
-					path.extname(file.originalname);
+				const filename = buf.toString("hex") + "-image-message.jpeg";
+				// +
+				// path.extname(file.originalname);
 				const fileInfo = {
 					filename: filename,
 					bucketName: "imageMessages",
@@ -49,8 +48,12 @@ const uploadImage = multer({ storage });
 
 exports.uploadMessageHandler = uploadImage.single("image");
 
-exports.createImageMessage = (req, res, next) => {
-	res.json({ image: req.file });
+exports.createImageMessage = async (req, res, next) => {
+	req.file.fromUser = req.body.fromUser;
+	req.file.chatRoom = req.body.chatRoom;
+	const imageMessage = await ImageMessage.create(req.file);
+
+	res.json({ image: req.file, imageMessage: imageMessage });
 };
 
 exports.getAllImageMessages = (req, res, next) => {
@@ -84,9 +87,13 @@ exports.getOneImage = (req, res, next) => {
 		}
 
 		// Check if image
-		if (file.contentType === "image/jpeg" || file.contentType === "image/png") {
+		if (
+			file.contentType === "image/jpeg" ||
+			file.contentType === "image/png" ||
+			file.contentType === "image/jpg"
+		) {
 			// Read output to browser
-			res.set("Content-Type", "image/png");
+			res.set("Content-Type", file.contentType);
 			const readstream = gfs.createReadStream(file.filename);
 			readstream.pipe(res);
 		} else {
@@ -94,5 +101,20 @@ exports.getOneImage = (req, res, next) => {
 				err: "Not an image",
 			});
 		}
+	});
+};
+
+exports.imageMessages = async (req, res, next) => {
+	const imageMessages = await ImageMessage.find({
+		chatRoom: req.params.chatRoom,
+	});
+
+	if (!imageMessages || imageMessages.length === 0) {
+		return res.json({ status: "failed" });
+	}
+
+	res.json({
+		status: "success",
+		imageMessages: imageMessages,
 	});
 };

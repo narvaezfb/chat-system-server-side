@@ -28,6 +28,10 @@ const messageSchema = new mongoose.Schema(
 		filename: {
 			type: String,
 		},
+		image: {
+			type: mongoose.Schema.ObjectId,
+			ref: "ImageMessage",
+		},
 	},
 	{
 		toJSON: { virtuals: true },

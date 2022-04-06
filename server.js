@@ -98,6 +98,27 @@ io.on("connection", function (socket) {
 				.to(data.chatRoom)
 				.emit("recieve-message", retrieveCurrentChatHistory);
 		}
+
+		if (data.messageFormat == "image") {
+			const newMessageData = {
+				chatRoom: data.chatRoom,
+				fromUser: data.fromUser,
+				message: data.message,
+				messageFormat: data.messageFormat,
+				image: data.image,
+				filename: data.filename,
+			};
+
+			const message = await Message.create(newMessageData);
+
+			const retrieveCurrentChatHistory = await Message.find({
+				chatRoom: data.chatRoom,
+			});
+			console.log(retrieveCurrentChatHistory);
+			socket
+				.to(data.chatRoom)
+				.emit("recieve-message", retrieveCurrentChatHistory);
+		}
 	});
 
 	//Whenever someone disconnects this piece of code executed
