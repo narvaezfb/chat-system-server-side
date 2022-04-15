@@ -1,0 +1,13 @@
+#NODE_ENV: development
+#PORT: 3005
+#DATABASE: mongodb+srv://narvaezfb:Ecuador2020.@cluster0.xklpr.mongodb.net/QUIZDB?retryWrites=true&w=majority
+runtime: nodejs14
+
+env_variables:
+  #DB_URL: mongodb+srv://narvaezfb:Ecuador2020.@cluster0.xklpr.mongodb.net/QUIZDB?retryWrites=true&w=majority
+  DB_URL: mongodb+srv://capstoneTeam:Capstone2022.@cluster0.9ohzw.mongodb.net/CapstoneDB?retryWrites=true&w=majority
+
+security:
+  jwt:
+    secret: my-ultra-really-safe-long-secret-dc-chat2022
+    expiration: 90d
