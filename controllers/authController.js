@@ -3,9 +3,15 @@ const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
 
 //function that signs a new token
+// const signToken = (id) => {
+// 	return jwt.sign({ id: id }, process.env.JWT_SECRET, {
+// 		expiresIn: process.env.JWT_EXPIRES_IN,
+// 	});
+// };
+
 const signToken = (id) => {
-	return jwt.sign({ id: id }, process.env.JWT_SECRET, {
-		expiresIn: process.env.JWT_EXPIRES_IN,
+	return jwt.sign({ id: id }, "my-ultra-really-safe-long-secret-dc-chat2022", {
+		expiresIn: "90d",
 	});
 };
 
