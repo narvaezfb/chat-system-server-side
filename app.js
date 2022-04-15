@@ -27,11 +27,13 @@ app.use(
 	})
 );
 
+app.enable("trust proxy", true);
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(
 	session({
+		proxy: true,
 		key: "userId",
 		secret: "secretkeyawesome",
 		resave: false,
