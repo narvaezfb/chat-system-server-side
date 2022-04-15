@@ -11,7 +11,8 @@ router.get("/users", authController.protect, userController.getAllUsers);
 
 router.get("/users/:id", userController.getOneUser);
 
-router.get("/login", authController.protect, authController.checkUserLogin);
+router.get("/login", authController.checkUserLogin);
+// router.get("/login", authController.protect, authController.checkUserLogin);
 
 router.patch("/user/:id", userController.updateUser);
 
