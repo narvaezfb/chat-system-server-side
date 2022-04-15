@@ -6,8 +6,3 @@ runtime: nodejs14
 env_variables:
   #DB_URL: mongodb+srv://narvaezfb:Ecuador2020.@cluster0.xklpr.mongodb.net/QUIZDB?retryWrites=true&w=majority
   DB_URL: mongodb+srv://capstoneTeam:Capstone2022.@cluster0.9ohzw.mongodb.net/CapstoneDB?retryWrites=true&w=majority
-# security:
-#   jwt:
-#     secret: my-ultra-really-safe-long-secret-dc-chat2022
-#     expiration: 90d
-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
