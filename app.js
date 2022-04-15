@@ -16,13 +16,11 @@ app.use(express.json());
 app.use(
 	cors({
 		origin: [
-			"http://localhost:3000",
-			"http://localhost:3000/",
-			"http://localhost:3000/login",
-			"http://localhost:3000/chat",
-			"http://localhost:3000/user/userProfile",
-			"http://localhost:3000/audio",
-			"http://localhost:3000/audio/",
+			"https://tiny-creponne-e580b1.netlify.app",
+			"https://tiny-creponne-e580b1.netlify.app/",
+			"https://tiny-creponne-e580b1.netlify.app/login",
+			"https://tiny-creponne-e580b1.netlify.app/chat",
+			"https://tiny-creponne-e580b1.netlify.app/user/userProfile",
 		],
 		methods: ["GET", "POST", "PATCH", "DELETE"],
 		credentials: true,

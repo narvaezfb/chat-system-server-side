@@ -22,7 +22,7 @@ const server = http.createServer(app);
 //allow get a post requests
 const io = new Server(server, {
 	cors: {
-		origin: ["http://localhost:3000"],
+		origin: ["https://tiny-creponne-e580b1.netlify.app"],
 		methods: ["GET", "POST", "PATCH", "DELETE"],
 	},
 });
