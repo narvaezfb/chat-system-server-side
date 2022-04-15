@@ -17,7 +17,6 @@ app.use(
 	cors({
 		origin: [
 			"https://tiny-creponne-e580b1.netlify.app",
-			"https://tiny-creponne-e580b1.netlify.app/",
 			"https://tiny-creponne-e580b1.netlify.app/login",
 			"https://tiny-creponne-e580b1.netlify.app/chat",
 			"https://tiny-creponne-e580b1.netlify.app/user/userProfile",
@@ -27,7 +26,7 @@ app.use(
 	})
 );
 
-app.enable("trust proxy", true);
+app.set("trust proxy", 1);
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -36,14 +35,12 @@ app.use(
 		proxy: true,
 		key: "userId",
 		secret: "secretkeyawesome",
-		resave: false,
-		saveUninitialized: true,
+		resave: true,
+		saveUninitialized: false,
 		cookie: {
 			maxAge: 7200000,
-			httpOnly: false,
 			sameSite: "None",
 			secure: true,
-			domain: "https://tiny-creponne-e580b1.netlify.app",
 		},
 	})
 );
