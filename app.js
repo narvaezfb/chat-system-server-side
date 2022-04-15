@@ -39,7 +39,11 @@ app.use(
 		resave: false,
 		saveUninitialized: true,
 		cookie: {
-			expires: 600 * 600 * 24,
+			maxAge: 7200000,
+			httpOnly: false,
+			sameSite: "None",
+			secure: true,
+			domain: "https://tiny-creponne-e580b1.netlify.app",
 		},
 	})
 );
