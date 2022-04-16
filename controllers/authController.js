@@ -18,14 +18,17 @@ exports.signup = async (req, res, next) => {
 		const token = signToken(newUser._id);
 
 		res.status(201).json({
-			status: "succces",
+			status: "success",
 			token,
 			data: {
 				user: newUser,
 			},
 		});
-	} catch (e) {
-		console.log(e);
+	} catch (error) {
+		return res.send({
+			message: "This is an error!",
+			error: error.errors,
+		});
 	}
 };
 
