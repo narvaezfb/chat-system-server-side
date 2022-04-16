@@ -24,14 +24,17 @@ exports.signup = async (req, res, next) => {
 		const token = signToken(newUser._id);
 
 		res.status(201).json({
-			status: "succces",
+			status: "success",
 			token,
 			data: {
 				user: newUser,
 			},
 		});
-	} catch (e) {
-		console.log(e);
+	} catch (error) {
+		return res.send({
+			message: "This is an error!",
+			error: error.errors,
+		});
 	}
 };
 
@@ -120,4 +123,14 @@ exports.protect = async (req, res, next) => {
 	} catch (error) {
 		console.log(error);
 	}
+};
+
+exports.logout = (req, res, next) => {
+	//create a new session
+	req.session.user = null;
+	req.user = null;
+
+	res.status(200).json({
+		status: "success",
+	});
 };
