@@ -111,3 +111,13 @@ exports.protect = async (req, res, next) => {
 		console.log(error);
 	}
 };
+
+exports.logout = async (req, res, next) => {
+	//create a new session
+	req.session.user = null;
+	req.user = null;
+
+	res.status(200).json({
+		status: "success",
+	});
+};

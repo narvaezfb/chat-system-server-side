@@ -15,4 +15,6 @@ router.get("/login", authController.protect, authController.checkUserLogin);
 
 router.patch("/user/:id", userController.updateUser);
 
+router.get("/logout", authController.logout);
+
 module.exports = router;
