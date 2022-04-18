@@ -129,10 +129,7 @@ exports.protect = async (req, res, next) => {
 };
 
 exports.logout = (req, res, next) => {
-	res.clearCookie("userId");
-	// req.session.user = null;
-	// req.user = null;
-
+	res.clearCookie("userId").send();
 	res.status(200).json({
 		status: "success",
 	});
