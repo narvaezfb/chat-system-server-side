@@ -74,7 +74,11 @@ exports.login = async (req, res, next) => {
 };
 
 exports.checkUserLogin = (req, res, next) => {
-	if (req.session.user) {
+	if (
+		req.session.user ||
+		req.session.user !== null ||
+		req.session.user !== "undefined"
+	) {
 		res.status(200).json({
 			loggedIn: true,
 			user: req.session.user,
