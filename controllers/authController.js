@@ -75,19 +75,18 @@ exports.login = async (req, res, next) => {
 
 exports.checkUserLogin = (req, res, next) => {
 	if (
-		req.session.user ||
-		req.session.user !== null ||
-		req.session.user !== "undefined"
-	) {
-		res.status(200).json({
-			loggedIn: true,
-			user: req.session.user,
-		});
-	} else {
-		res.status(200).json({
+		!req.session.user ||
+		req.session.user === null ||
+		req.session.user === "undefined"
+	)
+		return res.status(200).json({
 			loggedIn: false,
 		});
-	}
+
+	res.status(200).json({
+		loggedIn: true,
+		user: req.session.user,
+	});
 };
 
 exports.protect = async (req, res, next) => {
