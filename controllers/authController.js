@@ -129,11 +129,13 @@ exports.protect = async (req, res, next) => {
 };
 
 exports.logout = (req, res, next) => {
-	//create a new session
-	req.session.user = null;
-	req.user = null;
+	// //create a new session
+	// req.session.user = null;
+	// req.user = null;
 
-	res.status(200).json({
-		status: "success",
-	});
+	// res.status(200).json({
+	// 	status: "success",
+	// });
+
+	res.clearCookie("userId");
 };
